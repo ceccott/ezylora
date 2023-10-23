@@ -1,5 +1,5 @@
 # EzyLoRA
-init, format, blip caption and settings, for kohya_ss LoRA training
+Simplifying init, format, BLIP caption and settings for kohya_ss LoRA training
 
 # Install 
 This script is based on [kohya_ss](https://github.com/bmaltais/kohya_ss). Follow the installation instructions for that.
