@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
 """
-Lora init script, based on Aitrepreneur tutorial:
+EzyLoRA script, based on Aitrepreneur tutorial:
 https://www.youtube.com/watch?v=70H03cv57-o&ab_channel=Aitrepreneur
 interfaced with bmaltais/kohya_ss gradio app
 
@@ -30,10 +30,10 @@ BLIP_CAPTION_MAX_LEN = 75
 
 # Logger settings
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-logger = logging.getLogger('LORA init')
+logger = logging.getLogger('EzyLoRA')
 
 # jinja2 settings
 env = Environment(loader=FileSystemLoader("./"))
@@ -45,34 +45,26 @@ def is_image_file(file_path, allowed_img_ext=ALLOWED_IMG_EXT):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Init, format, BLIP caption and training settings, for kohya_ss LORA training")
+    parser = argparse.ArgumentParser(description="Init, format, BLIP caption and training settings, for kohya_ss LoRA training")
 
     # Add the command-line arguments
     parser.add_argument("--lora_name", type=str, required=True,
-                        help="Name for LoRa data")
-    parser.add_argument("--num_pics", type=int, required=False,
-                        help="Number of pictures")
+                        help="name for LoRa model")
+    parser.add_argument("--src_path", type=str, required=True,
+                        help="training images folder, if supplied num_pics is automatically set")
     parser.add_argument("--dst_path", type=str, required=False,
-                        help="Destination path")
-    parser.add_argument("--src_path", type=str, required=False,
-                        help="Source for dataset images, if supplied num_pics is automatically set")
+                        help="destination path for the generated folder tree and files")
     parser.add_argument('--rename_pics', action='store_true',
-                        help="Rename pictures according to <lora name>_<number> pattern")
+                        help="rename pictures according to <LoRA name>_<number> pattern if supplied")
     parser.add_argument("--endpoint", type=str, required=False, default=DEFAULT_KOHYA_SS_ENDPOINT,
-                        help="Kohya_ss endpoint")
+                        help="kohya_ss endpoint")
 
     args = parser.parse_args()
     if args.dst_path is None:
-        logger.warning('destination path not set, defaulting to current folder')
+        logger.warning('Destination path not set, defaulting to current folder')
         args.dst_path = os.path.abspath(os.path.dirname(__file__))
 
-    if args.src_path is None and args.num_pics is None:
-        logger.warning(f'number of pictures not set, defaulting to {PIC_NUM_THRESHOLD}')
-        args.num_pics = PIC_NUM_THRESHOLD
-
     if args.src_path is not None:
-        if args.num_pics is not None:
-            logger.warning('number of pictures set, but src_path specified, ignoring num_pics argument')
         if not os.path.isdir(args.src_path):
             raise FileNotFoundError('No folder exists at specified src_path')
 
@@ -108,7 +100,7 @@ def main():
     template = env.get_template(LORA_SETTINGS_TPL_FILE)
 
     # Rendering of LORA settings file
-    logger.info('Writing LORA settings file to project root folder')
+    logger.info('Saving LoRA settings file to project root folder')
     rendered_lora_settings_file = template.render(
         lora_path=lora_path,
         model_name=args.lora_name
@@ -132,6 +124,7 @@ def main():
         "",  # str  in 'Postfix to add to BLIP caption' Textbox component
         fn_index=API_BLIP_CAPTION_FN_INDEX
     )
+    logger.info("BLIP captioning complete, exiting...")
 
 
 if __name__ == "__main__":
