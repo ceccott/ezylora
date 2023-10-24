@@ -34,6 +34,7 @@ options:
   --src_path SRC_PATH   training images folder, if supplied num_pics is automatically set
   --dst_path DST_PATH   destination path for the generated folder tree and files
   --rename_pics         rename pictures according to <LoRA name>_<number> pattern if supplied
+  --sdxl                sdxl model training. Use suitable images with this option enabled
   --endpoint ENDPOINT   kohya_ss endpoint
   ```
 
@@ -55,3 +56,6 @@ my_lora
 To train the LoRA, navigate to the kohya_ss web UI at `localhost:7860` and load the `LoraSettings.json` configuration file by setting its absolute path under LoRA->Training->Configuration File and clicking Load 💾.
 
 ![image](https://github.com/ceccott/ezylora/assets/5775579/32d8ed1c-7bbd-484c-9a01-7e205edb5bd6)
+
+# Tests
+Training settings tested with GeForce RTX 3060 (12 GB VRAM).

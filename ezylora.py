@@ -21,11 +21,12 @@ ITER_MIN_NUM_PER_PIC = 100
 PIC_NUM_THRESHOLD = 15
 ALLOWED_IMG_EXT = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp"]
 LORA_SETTINGS_TPL_FILE = 'LoraSettings.json.tpl'
+LORA_SETTINGS_XL_TPL_FILE = 'LoraSettingsXL.json.tpl'
 
 # Koya_ss settings
 DEFAULT_KOHYA_SS_ENDPOINT = 'http://0.0.0.0:7860/'
 API_BLIP_CAPTION_FN_INDEX = 184
-BLIP_CAPTION_MIN_LEN = 20
+BLIP_CAPTION_MIN_LEN = 30
 BLIP_CAPTION_MAX_LEN = 75
 
 # Logger settings
@@ -56,6 +57,8 @@ def main():
                         help="destination path for the generated folder tree and files")
     parser.add_argument('--rename_pics', action='store_true',
                         help="rename pictures according to <LoRA name>_<number> pattern if supplied")
+    parser.add_argument('--sdxl', action='store_true',
+                        help="sdxl model training. Use suitable images with this option enabled")
     parser.add_argument("--endpoint", type=str, required=False, default=DEFAULT_KOHYA_SS_ENDPOINT,
                         help="kohya_ss endpoint")
 
@@ -97,7 +100,10 @@ def main():
                         os.path.join(lora_path['image_set'],
                                      args.lora_name + '_' + str(cnt) + src_file_ext if args.rename_pics else ''))
 
-    template = env.get_template(LORA_SETTINGS_TPL_FILE)
+    if args.sdxl:
+        template = env.get_template(LORA_SETTINGS_XL_TPL_FILE)
+    else:
+        template = env.get_template(LORA_SETTINGS_TPL_FILE)
 
     # Rendering of LORA settings file
     logger.info('Saving LoRA settings file to project root folder')
@@ -125,6 +131,7 @@ def main():
         fn_index=API_BLIP_CAPTION_FN_INDEX
     )
     logger.info("BLIP captioning complete, exiting...")
+    logger.info(f"load the settings file {lora_path['root']}/LoraSettings.json in kohya_ss webapp to start the training")
 
 
 if __name__ == "__main__":
