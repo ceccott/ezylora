@@ -1,5 +1,5 @@
 # EzyLoRA
-init, format, blip caption and settings, for kohya_ss LoRA training
+Simplifying init, format, BLIP caption and settings for kohya_ss LoRA training
 
 # Install 
 This script is based on [kohya_ss](https://github.com/bmaltais/kohya_ss). Follow the installation instructions for that.
@@ -56,6 +56,8 @@ my_lora
 To train the LoRA, navigate to the kohya_ss web UI at `localhost:7860` and load the `LoraSettings.json` configuration file by setting its absolute path under LoRA->Training->Configuration File and clicking Load 💾.
 
 ![image](https://github.com/ceccott/ezylora/assets/5775579/32d8ed1c-7bbd-484c-9a01-7e205edb5bd6)
+
+The basic configuration is now loaded and the training can be started by clicking the Start Training button on the same UI page. Parameters can be modified under the Parameters tab to fine tune the training process if so needed.
 
 # Tests
 Training settings tested with GeForce RTX 3060 (12 GB VRAM).
